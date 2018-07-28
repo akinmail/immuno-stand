@@ -15,6 +15,9 @@ public class AppController {
     @Autowired
     HospitalRepository hospitalRepository;
 
+    public AppController() {
+    }
+
     @RequestMapping(value="/hospital", method=RequestMethod.POST)
     public Hospital createHospital(@RequestBody Hospital hospital){
         List<Hospital> hospitalList = hospitalRepository.findAll().stream()
@@ -38,16 +41,20 @@ public class AppController {
     }
 
     @RequestMapping(value="/child/{hospitalid}", method=RequestMethod.POST)
-    public Child registerChild(@RequestBody Child child, @PathVariable String hospitalid){
+    public Child registerChild(@RequestBody Child child, @PathVariable String hospitalid) throws Exception {
         child.generateDetailsHash();
         Optional<Hospital> hospital = hospitalRepository.findById(hospitalid);
         hospital.ifPresent(m->{
             m.getChildren().add(child);
             hospitalRepository.save(m);
         });
-
+        if(hospital.isPresent()){
+            return child;
+        }else {
+            throw new Exception("Cannot find hospital with hospital id "+ hospitalid);
+        }
         //TODO call smart contract
-        return child;
+        //return child;
     }
 
     @RequestMapping(value="/child/{hash}", method=RequestMethod.GET)
