@@ -63,7 +63,7 @@ public class Child {
         this.scheduleList = scheduleList;
     }
 
-    private class Schedule{
+    public static class Schedule{
         private String immunizationCode;
         private int countTotal;
         private int countCompleted;
