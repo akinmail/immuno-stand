@@ -38,6 +38,7 @@ public class AppController {
 
         Credentials credentials = Credentials.create("2bab03ed7d2724fa1551c68ec143f2c59be75411e3bf787bdd0a4ba544d026ab");
         this.immunization = Immunization_sol_Immunization.load(CONTRACT_ADDRESS, web3j, credentials, BigInteger.valueOf(1), BigInteger.valueOf(3));
+        System.out.println(contract.name().send().toString());
     }
 
     @RequestMapping(value="/hospital", method=RequestMethod.POST)
@@ -71,8 +72,9 @@ public class AppController {
             hospitalRepository.save(m);
         });
         if(hospital.isPresent()){
-            TransactionReceipt transactionReceipt = immunization.registerChild(child.getChildName(), child.getMotherName(), child.getDob(), BigInteger.valueOf(child.getPhoneNumber()), child.getDetailsHash()).send();
-            System.out.println(transactionReceipt.toString());
+            immunization.registerChild(child.getChildName(), child.getMotherName(), child.getDob(), BigInteger.valueOf(child.getPhoneNumber()), child.getDetailsHash())
+                    .sendAsync();
+            //System.out.println(transactionReceipt.toString());
             return child;
         }else {
             throw new Exception("Cannot find hospital with hospital id "+ hospitalid);
