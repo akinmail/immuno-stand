@@ -10,6 +10,7 @@ import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +71,8 @@ public class AppController {
             hospitalRepository.save(m);
         });
         if(hospital.isPresent()){
-            immunization.registerChild(child.getChildName(), child.getMotherName(), child.getDob(), BigInteger.valueOf(child.getPhoneNumber()), child.getDetailsHash());
+            TransactionReceipt transactionReceipt = immunization.registerChild(child.getChildName(), child.getMotherName(), child.getDob(), BigInteger.valueOf(child.getPhoneNumber()), child.getDetailsHash()).send();
+            System.out.println(transactionReceipt.toString());
             return child;
         }else {
             throw new Exception("Cannot find hospital with hospital id "+ hospitalid);
