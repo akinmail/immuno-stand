@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Document
 public class Hospital {
+    @Id
     private String id;
     private String name;
     private String address;
@@ -17,6 +18,14 @@ public class Hospital {
 
     public void generateId() {
         this.id = UUID.randomUUID().toString().replaceAll("-","");
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
