@@ -2,7 +2,6 @@ package com.akinmail.blockchain.immune.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
 public class Child {
     private String childName;
     private String motherName;

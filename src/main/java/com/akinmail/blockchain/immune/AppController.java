@@ -16,6 +16,7 @@ public class AppController {
 
     @RequestMapping(value="/hospital", method=RequestMethod.POST)
     public Hospital createHospital(@RequestBody Hospital hospital){
+        hospital.generateId();
         return hospitalRepository.save(hospital);
     }
 

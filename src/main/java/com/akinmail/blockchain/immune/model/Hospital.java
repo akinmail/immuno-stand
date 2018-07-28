@@ -3,7 +3,9 @@ package com.akinmail.blockchain.immune.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.annotation.Generated;
 import java.util.List;
+import java.util.UUID;
 
 @Document
 public class Hospital {
@@ -12,6 +14,10 @@ public class Hospital {
     private String name;
     private String location;
     private List<Child> children;
+
+    public void generateId() {
+        this.id = UUID.randomUUID().toString().replaceAll("-","");
+    }
 
     public String getName() {
         return name;
