@@ -12,6 +12,7 @@ public class Hospital {
     @Id
     private String id;
     private String name;
+    private String address;
     private String location;
     private List<Child> children;
 
@@ -41,5 +42,13 @@ public class Hospital {
 
     public void setChildren(List<Child> children) {
         this.children = children;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
