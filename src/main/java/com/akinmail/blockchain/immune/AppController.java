@@ -36,7 +36,9 @@ public class AppController {
         Optional<Hospital> hospital = hospitalRepository.findById(hospitalid);
         hospital.ifPresent(m->{
             m.getChildren().add(child);
+            hospitalRepository.save(m);
         });
+
         //TODO call smart contract
         return child;
     }
