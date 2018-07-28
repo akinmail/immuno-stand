@@ -10,6 +10,7 @@ public class Child {
     private Long phoneNumber;
     private String detailsHash;
     private List<Schedule> scheduleList = new ArrayList<>();
+    private boolean immunizationComplete = false;
 
     public void generateDetailsHash(){
         this.detailsHash = String.valueOf(phoneNumber) + childName.replace(" ", "");
@@ -61,6 +62,14 @@ public class Child {
 
     public void setScheduleList(List<Schedule> scheduleList) {
         this.scheduleList = scheduleList;
+    }
+
+    public boolean isImmunizationComplete() {
+        return immunizationComplete;
+    }
+
+    public void setImmunizationComplete(boolean immunizationComplete) {
+        this.immunizationComplete = immunizationComplete;
     }
 
     public static class Schedule{
