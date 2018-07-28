@@ -68,10 +68,7 @@ public class Child {
         private int countTotal;
         private int countCompleted;
 
-        public Schedule(String immunizationCode, int countTotal, int countCompleted) {
-            this.immunizationCode = immunizationCode;
-            this.countTotal = countTotal;
-            this.countCompleted = countCompleted;
+        public Schedule() {
         }
 
         public String getImmunizationCode() {
