@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Document
 public class Hospital {
-    @Id
     private String id;
     private String name;
     private String address;
