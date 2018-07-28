@@ -11,6 +11,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.Contract;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class AppController {
     public AppController() {
 
         Credentials credentials = Credentials.create("2bab03ed7d2724fa1551c68ec143f2c59be75411e3bf787bdd0a4ba544d026ab");
-        this.immunization = Immunization_sol_Immunization.load(CONTRACT_ADDRESS, web3j, credentials, BigInteger.valueOf(1), BigInteger.valueOf(3));
+        this.immunization = Immunization_sol_Immunization.load(CONTRACT_ADDRESS, web3j, credentials, Contract.GAS_PRICE, Contract.GAS_LIMIT);
         //System.out.println(contract.name().send().toString());
     }
 
