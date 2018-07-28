@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.annotation.Generated;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public class Hospital {
     private String name;
     private String address;
     private String location;
-    private List<Child> children;
+    private List<Child> children = new ArrayList<>();
 
     public void generateId() {
         this.id = UUID.randomUUID().toString().replaceAll("-","");
