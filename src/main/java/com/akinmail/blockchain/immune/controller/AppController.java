@@ -1,4 +1,4 @@
-package com.akinmail.blockchain.immune;
+package com.akinmail.blockchain.immune.controller;
 
 import com.akinmail.blockchain.immune.model.Child;
 import com.akinmail.blockchain.immune.model.Hospital;
@@ -17,6 +17,12 @@ public class AppController {
 
     @RequestMapping(value="/hospital", method=RequestMethod.POST)
     public Hospital createHospital(@RequestBody Hospital hospital){
+        List<Hospital> hospitalList = hospitalRepository.findAll().stream()
+                .filter(f->f.getName().equals(hospital.getName()))
+                .collect(Collectors.toList());
+        if(hospitalList.size() > 0){
+            return hospitalList.get(0);
+        }
         hospital.generateId();
         return hospitalRepository.save(hospital);
     }

@@ -1,6 +1,7 @@
 package com.akinmail.blockchain.immune.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Child {
     private String childName;
@@ -8,6 +9,7 @@ public class Child {
     private String dob;
     private Long phoneNumber;
     private String detailsHash;
+    private List<Schedule> scheduleList = new ArrayList<>();
 
     public void generateDetailsHash(){
         this.detailsHash = String.valueOf(phoneNumber) + childName.replace(" ", "");
@@ -51,5 +53,49 @@ public class Child {
 
     public void setDetailsHash(String detailsHash) {
         this.detailsHash = detailsHash;
+    }
+
+    public List<Schedule> getScheduleList() {
+        return scheduleList;
+    }
+
+    public void setScheduleList(List<Schedule> scheduleList) {
+        this.scheduleList = scheduleList;
+    }
+
+    private class Schedule{
+        private String immunizationCode;
+        private int countTotal;
+        private int countCompleted;
+
+        public Schedule(String immunizationCode, int countTotal, int countCompleted) {
+            this.immunizationCode = immunizationCode;
+            this.countTotal = countTotal;
+            this.countCompleted = countCompleted;
+        }
+
+        public String getImmunizationCode() {
+            return immunizationCode;
+        }
+
+        public void setImmunizationCode(String immunizationCode) {
+            this.immunizationCode = immunizationCode;
+        }
+
+        public int getCountTotal() {
+            return countTotal;
+        }
+
+        public void setCountTotal(int countTotal) {
+            this.countTotal = countTotal;
+        }
+
+        public int getCountCompleted() {
+            return countCompleted;
+        }
+
+        public void setCountCompleted(int countCompleted) {
+            this.countCompleted = countCompleted;
+        }
     }
 }
