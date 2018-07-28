@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class AppController {
@@ -44,14 +45,18 @@ public class AppController {
     }
 
     @RequestMapping(value="/child/{hash}", method=RequestMethod.GET)
-    public Child getChild(@PathVariable String hash){
+    public List<Child> getChild(@PathVariable String hash){
+
+        return hospitalRepository.findAll().stream()
+                .flatMap(elt -> elt.getChildren().stream().filter(elt2 -> elt2.getDetailsHash().equals(hash)))
+                .collect(Collectors.toList());
         //TODO call smart contract
-        Child child = new Child();
+        /*Child child = new Child();
         child.setChildName("akinyemi akindele");
         child.setDob("23/11/95");
         child.setMotherName("Ayo");
         child.setDetailsHash(hash);
-        return child;
+        return child;*/
     }
 
 
