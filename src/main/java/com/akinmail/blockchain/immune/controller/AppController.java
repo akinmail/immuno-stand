@@ -73,8 +73,12 @@ public class AppController {
             hospitalRepository.save(m);
         });
         if(hospital.isPresent()){
-            immunization.registerChild(child.getChildName(), child.getMotherName(), child.getDob(), BigInteger.valueOf(child.getPhoneNumber()), child.getDetailsHash())
-                    .sendAsync();
+            try {
+                TransactionReceipt transactionReceipt = immunization.registerChild(child.getChildName(), child.getMotherName(), child.getDob(), BigInteger.valueOf(child.getPhoneNumber()), child.getDetailsHash())
+                        .send();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             //System.out.println(transactionReceipt.toString());
             return child;
         }else {
@@ -97,6 +101,22 @@ public class AppController {
         child.setDetailsHash(hash);
         return child;*/
     }
+
+    /*@RequestMapping(value="/child/{hash}/{shedulecode}", method=RequestMethod.POST)
+    public List<Child> updateChild(@PathVariable String hash, @PathVariable String schedulecode, @RequestBody Child.Schedule schedule){
+
+        hospitalRepository.findAll().stream()
+                .flatMap(elt -> elt.getChildren().stream().filter(elt2 -> elt2.getDetailsHash().equals(hash)).filter(g->g.getScheduleList().remove(elt2)));
+
+        children
+        //TODO call smart contract
+        *//*Child child = new Child();
+        child.setChildName("akinyemi akindele");
+        child.setDob("23/11/95");
+        child.setMotherName("Ayo");
+        child.setDetailsHash(hash);
+        return child;*//*
+    }*/
 
 
 
