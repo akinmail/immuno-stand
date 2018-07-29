@@ -124,7 +124,7 @@ public class AppController {
         try {
             Credentials credentials = Credentials.create("2bab03ed7d2724fa1551c68ec143f2c59be75411e3bf787bdd0a4ba544d026ab");
             this.immunization = new Immunization_sol_Immunization(CONTRACT_ADDRESS, web3j, credentials, Contract.GAS_PRICE, Contract.GAS_LIMIT);
-            TransactionReceipt transactionReceipt = immunization.updateChild(hash, BigInteger.valueOf(schedule.getImmunizationCode()), BigInteger.valueOf(schedule.getCountCompleted())).send();
+            TransactionReceipt transactionReceipt = immunization.updateChild(hash, BigInteger.valueOf(Long.valueOf(schedule.getImmunizationCode())), BigInteger.valueOf(schedule.getCountCompleted())).send();
             //System.out.println(transactionReceipt);
         } catch (Exception e) {
             e.printStackTrace();
