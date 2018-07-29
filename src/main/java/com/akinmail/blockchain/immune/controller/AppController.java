@@ -37,8 +37,9 @@ public class AppController {
 
     public AppController() {
 
-        Credentials credentials = Credentials.create("2bab03ed7d2724fa1551c68ec143f2c59be75411e3bf787bdd0a4ba544d026ab");
-        this.immunization = Immunization_sol_Immunization.load(CONTRACT_ADDRESS, web3j, credentials, Contract.GAS_PRICE, Contract.GAS_LIMIT);
+        /*Credentials credentials = Credentials.create("2bab03ed7d2724fa1551c68ec143f2c59be75411e3bf787bdd0a4ba544d026ab");
+        this.immunization = new Immunization_sol_Immunization(CONTRACT_ADDRESS, web3j, credentials, Contract.GAS_PRICE, Contract.GAS_LIMIT);
+*/        //this.immunization = Immunization_sol_Immunization.load(CONTRACT_ADDRESS, web3j, credentials, Contract.GAS_PRICE, Contract.GAS_LIMIT);
         //System.out.println(contract.name().send().toString());
     }
 
@@ -74,6 +75,8 @@ public class AppController {
         });
         if(hospital.isPresent()){
             try {
+                Credentials credentials = Credentials.create("2bab03ed7d2724fa1551c68ec143f2c59be75411e3bf787bdd0a4ba544d026ab");
+                this.immunization = new Immunization_sol_Immunization(CONTRACT_ADDRESS, web3j, credentials, Contract.GAS_PRICE, Contract.GAS_LIMIT);
                 TransactionReceipt transactionReceipt = immunization.registerChild(child.getChildName(), child.getMotherName(), child.getDob(), BigInteger.valueOf(child.getPhoneNumber()), child.getDetailsHash())
                         .send();
             } catch (Exception e) {
