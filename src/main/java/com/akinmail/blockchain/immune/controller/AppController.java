@@ -90,6 +90,17 @@ public class AppController {
         //TODO call smart contract
     }
 
+    public Child regissterChildByHospitalName(Child child, String hospitalName) throws Exception {
+        List<Hospital> hospitalList = hospitalRepository.findAll().stream()
+                .filter(f->f.getName().equals(hospitalName))
+                .collect(Collectors.toList());
+        if(hospitalList.size() > 0){
+            return registerChild(child, hospitalList.get(0).getId());
+        }else {
+            throw new Exception("Cannot find hospital with hospital name "+ hospitalName);
+        }
+    }
+
     @RequestMapping(value="/child/{hash}", method=RequestMethod.GET)
     public List<Child> getChild(@PathVariable String hash){
 
@@ -105,22 +116,19 @@ public class AppController {
         return child;*/
     }
 
-    /*@RequestMapping(value="/child/{hash}/{shedulecode}", method=RequestMethod.POST)
-    public List<Child> updateChild(@PathVariable String hash, @PathVariable String schedulecode, @RequestBody Child.Schedule schedule){
-
-        hospitalRepository.findAll().stream()
-                .flatMap(elt -> elt.getChildren().stream().filter(elt2 -> elt2.getDetailsHash().equals(hash)).filter(g->g.getScheduleList().remove(elt2)));
-
-        children
-        //TODO call smart contract
-        *//*Child child = new Child();
-        child.setChildName("akinyemi akindele");
-        child.setDob("23/11/95");
-        child.setMotherName("Ayo");
-        child.setDetailsHash(hash);
-        return child;*//*
-    }*/
-
-
-
+    @RequestMapping(value="/child/{hash}/{shedulecode}", method=RequestMethod.POST)
+    public Child updateChild(@PathVariable String hash, @PathVariable String shedulecode, @RequestBody Child.Schedule schedule)throws Exception{
+        Child child = new Child();
+        int code = Integer.valueOf(shedulecode);
+        child.getScheduleList().add(schedule);
+        try {
+            Credentials credentials = Credentials.create("2bab03ed7d2724fa1551c68ec143f2c59be75411e3bf787bdd0a4ba544d026ab");
+            this.immunization = new Immunization_sol_Immunization(CONTRACT_ADDRESS, web3j, credentials, Contract.GAS_PRICE, Contract.GAS_LIMIT);
+            TransactionReceipt transactionReceipt = immunization.updateChild(hash, BigInteger.valueOf(schedule.getImmunizationCode()), BigInteger.valueOf(schedule.getCountCompleted())).send();
+            //System.out.println(transactionReceipt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return child;
+    }
 }

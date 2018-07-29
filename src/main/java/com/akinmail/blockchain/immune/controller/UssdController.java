@@ -1,5 +1,6 @@
 package com.akinmail.blockchain.immune.controller;
 
+import com.akinmail.blockchain.immune.model.Child;
 import com.akinmail.blockchain.immune.model.Session;
 import com.akinmail.blockchain.immune.model.UssdRequest;
 import com.akinmail.blockchain.immune.repository.SessionRepository;
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class UssdController {
     @Autowired
     private SessionRepository sessionRepository;
+    @Autowired
+    private AppController appController;
 
     @RequestMapping(value="/ussd", method=RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String message(UssdRequest ussdRequest) {
@@ -28,7 +31,59 @@ public class UssdController {
             if(sessionRepository.existsById(ussdRequest.getSessionId())){
                 Optional<Session> session = sessionRepository.findById(ussdRequest.getSessionId());
                 Session session1 = session.get();
-                switch (session1.getState()){}
+                String returnString = "";
+                switch (session1.getState()){
+                    case "0":
+                        if(ussdRequest.getText().equals("1")){
+                            session1.setState("1A");
+                            sessionRepository.save(session1);
+                            returnString = "CON What is the name of the child? \n";
+                        }else if(ussdRequest.getText().equals("2")){
+                            session1.setState("2A");
+                            sessionRepository.save(session1);
+                            returnString = "CON What is the immunization code? \n";
+                        }
+                        break;
+                    case "1A":
+                        Child child = new Child();
+                        child.setChildName(ussdRequest.getText());
+                        session1.setChild(child);
+                        returnString = "CON What is the name of the child's mother? \n";
+                        session1.setState("1B");
+                        sessionRepository.save(session1);
+                        break;
+                    case "1B":
+                        session1.getChild().setMotherName(ussdRequest.getText());
+                        returnString = "CON What is the date of birth of the child? \n";
+                        session1.setState("1C");
+                        sessionRepository.save(session1);
+                        break;
+                    case "1C":
+                        session1.getChild().setDob(ussdRequest.getText());
+                        returnString = "CON What is the phone no of the mother or father or relative? \n";
+                        session1.setState("1D");
+                        sessionRepository.save(session1);
+                        break;
+                    case "1D":
+                        session1.getChild().setPhoneNumber(Long.valueOf(ussdRequest.getText()));
+                        returnString = "CON What is the name of the hospital? \n";
+                        session1.setState("1E");
+                        sessionRepository.save(session1);
+                        break;
+                    case "1E":
+                        String hospitalName = ussdRequest.getText();
+                        returnString = "END Thanks, the child has been registered \n";
+                        session1.setState("1F");
+                        sessionRepository.save(session1);
+                        try {
+                            appController.regissterChildByHospitalName(session1.getChild(), hospitalName);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+                }
+                return returnString;
             }
         }
 
