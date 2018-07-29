@@ -21,6 +21,7 @@ public class UssdController {
 
     @RequestMapping(value="/ussd", method=RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String message(UssdRequest ussdRequest) {
+        //TODO resume state
         if(ussdRequest.getText().equals("")){
             Session session = new Session();
             session.setSessionId(ussdRequest.getSessionId());
@@ -41,37 +42,37 @@ public class UssdController {
                         }else if(ussdRequest.getText().equals("2")){
                             session1.setState("2A");
                             sessionRepository.save(session1);
-                            returnString = "CON What is the immunization code? \n";
+                            returnString = "CON What is the name of the Child? \n";
                         }
                         break;
                     case "1A":
                         Child child = new Child();
-                        child.setChildName(ussdRequest.getText());
+                        child.setChildName(ussdRequest.getText().split("\\*")[ussdRequest.getText().split("\\*").length-1]);
                         session1.setChild(child);
                         returnString = "CON What is the name of the child's mother? \n";
                         session1.setState("1B");
                         sessionRepository.save(session1);
                         break;
                     case "1B":
-                        session1.getChild().setMotherName(ussdRequest.getText());
+                        session1.getChild().setMotherName(ussdRequest.getText().split("\\*")[ussdRequest.getText().split("\\*").length-1]);
                         returnString = "CON What is the date of birth of the child? \n";
                         session1.setState("1C");
                         sessionRepository.save(session1);
                         break;
                     case "1C":
-                        session1.getChild().setDob(ussdRequest.getText());
+                        session1.getChild().setDob(ussdRequest.getText().split("\\*")[ussdRequest.getText().split("\\*").length-1]);
                         returnString = "CON What is the phone no of the mother or father or relative? \n";
                         session1.setState("1D");
                         sessionRepository.save(session1);
                         break;
                     case "1D":
-                        session1.getChild().setPhoneNumber(Long.valueOf(ussdRequest.getText()));
+                        session1.getChild().setPhoneNumber(Long.valueOf(ussdRequest.getText().split("\\*")[ussdRequest.getText().split("\\*").length-1]));
                         returnString = "CON What is the name of the hospital? \n";
                         session1.setState("1E");
                         sessionRepository.save(session1);
                         break;
                     case "1E":
-                        String hospitalName = ussdRequest.getText();
+                        String hospitalName = ussdRequest.getText().split("\\*")[ussdRequest.getText().split("\\*").length-1];
                         returnString = "END Thanks, the child has been registered \n";
                         session1.setState("1F");
                         sessionRepository.save(session1);
@@ -80,6 +81,26 @@ public class UssdController {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        break;
+                    case "2A":
+                        Child child1 = new Child();
+                        child1.setChildName(ussdRequest.getText().split("\\*")[ussdRequest.getText().split("\\*").length-1]);
+                        session1.setChild(child1);
+                        returnString = "CON What is the phone no of the mother or father or relative? \n";
+                        session1.setState("2B");
+                        sessionRepository.save(session1);
+                        break;
+                    case "2B":
+                        session1.getChild().setPhoneNumber(Long.valueOf(ussdRequest.getText().split("\\*")[ussdRequest.getText().split("\\*").length-1]));
+                        returnString = "CON What is the name of the Disease being immunized? \n";
+                        session1.setState("2C");
+                        sessionRepository.save(session1);
+                        break;
+                    case "2C":
+                        session1.getChild().setChildName(ussdRequest.getText().split("\\*")[ussdRequest.getText().split("\\*").length-1]);
+                        returnString = "END Thanks, the record of the child being immunized has been saved \n";
+                        session1.setState("2D");
+                        sessionRepository.save(session1);
                         break;
 
                 }
